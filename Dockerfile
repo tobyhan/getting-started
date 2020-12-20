@@ -7,10 +7,10 @@ RUN pip install -r requirements.txt
 
 # Run tests to validate app
 FROM node:12-alpine AS app-base
-RUN apk add --no-cache python g++ make
+RUN echo -e http://mirrors.ustc.edu.cn/alpine/v3.11/main/ > /etc/apk/repositories && apk update && apk add --no-cache python g++ make
 WORKDIR /app
 COPY app/package.json app/yarn.lock ./
-RUN yarn install
+RUN yarn config set registry https://registry.npm.taobao.org && yarn install
 COPY app/spec ./spec
 COPY app/src ./src
 RUN yarn test
